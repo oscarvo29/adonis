@@ -21,6 +21,8 @@ public class UserController {
     @GetMapping("/")
     private ArrayList<String> getUserInfo() throws JsonProcessingException {
         User user = userService.getUserInfo("OPaOwSwzuBeQXb6XqIctBvjYkkm2");
+
+        System.out.println(user.getFullname());
         return userService.getLikeAbleUIDs(user);
     }
 }

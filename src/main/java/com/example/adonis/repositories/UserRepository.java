@@ -7,8 +7,10 @@ import com.example.adonis.models.User;
 import com.example.adonis.services.ConnectionService;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
+import com.google.firebase.database.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ import java.util.concurrent.ExecutionException;
 @Repository
 public class UserRepository {
 
+    private Firestore db = null;
+
     @Autowired
     private ConnectionService connectionService;
 
@@ -26,16 +30,18 @@ public class UserRepository {
 
     public User getActiveUserInfo(String uid) {
         User user = null;
-        Firestore db = connectionService.getDb();
+        this.db = connectionService.getDb();
         try {
             CollectionReference userReference = db.collection(userCollection);
             Query query =  userReference.whereEqualTo("uid", uid);
             QuerySnapshot querySnapshotApiFuture = query.get().get();
 
             for (DocumentSnapshot document : querySnapshotApiFuture.getDocuments()) {
-                Map<String, String> genderMap = (Map<String, String>) document.get("gender");
+                //Map<String, String> genderMap = (Map<String, String>) document.get("gender");
+                String genderSTring = document.get("gender", String.class);
                 ArrayList<Map<String, String>> preferenceList = (ArrayList<Map<String, String>>) document.get("preference");
-                Gender gender = new Gender(genderMap.get("id"), genderMap.get("gender"));
+                //Gender gender = new Gender(genderMap.get("id"), genderMap.get("gender"));
+                Gender gender = new Gender("test", genderSTring);
                 ArrayList<Preference> preferences = new ArrayList<>();
 
                 for (Map<String, String> preference : preferenceList) {
@@ -65,9 +71,12 @@ public class UserRepository {
                 uids.add(document.get("uid", String.class));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return uids;
     }
+
+    //
+
 }
