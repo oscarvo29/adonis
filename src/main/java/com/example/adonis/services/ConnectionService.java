@@ -14,7 +14,7 @@ import java.io.IOException;
 public class ConnectionService {
     private FileInputStream serviceAccount = null;
     private FirebaseOptions options = null;
-    private  Firestore db = null;
+    private Firestore db = null;
 
     public ConnectionService() {
         try {

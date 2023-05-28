@@ -46,13 +46,4 @@ public class User {
         this.preferences = preferences;
         this.age = age;
     }
-
-    public ArrayList<String> getPreferencesStrings() {
-        ArrayList<String> preferenceList = new ArrayList<>();
-        for(Preference preference : this.preferences) {
-            preferenceList.add(preference.getPreference());
-        }
-
-        return preferenceList;
-    }
 }

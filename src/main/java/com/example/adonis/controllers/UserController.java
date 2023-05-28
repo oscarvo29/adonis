@@ -25,4 +25,9 @@ public class UserController {
         System.out.println(user.getFullname());
         return userService.getLikeAbleUIDs(user);
     }
+
+    @GetMapping("/hello-world")
+    private String helloWorld() {
+        return "Hello world";
+    }
 }

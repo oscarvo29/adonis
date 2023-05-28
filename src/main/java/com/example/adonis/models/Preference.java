@@ -1,18 +1,27 @@
 package com.example.adonis.models;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Getter
-@Setter
+import java.util.HashSet;
+import java.util.Set;
+
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity @Table @Data
 public class Preference {
-    private String referenceId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long preferenceId;
+    private String firUid;
+    private String gender;
     private String preference;
-    private String referenceDocument;
 
-    public Preference(String referenceId, String preference, String referenceDocument) {
-        this.referenceId = referenceId;
+    public Preference(String firUid, String gender, String preference) {
+        this.firUid = firUid;
+        this.gender = gender;
         this.preference = preference;
-        this.referenceDocument = referenceDocument;
     }
 }

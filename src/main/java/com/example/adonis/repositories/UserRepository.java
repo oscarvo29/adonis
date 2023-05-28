@@ -12,12 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-@Repository
+@Service
 public class UserRepository {
 
     private Firestore db = null;
@@ -41,12 +42,12 @@ public class UserRepository {
                 String genderSTring = document.get("gender", String.class);
                 ArrayList<Map<String, String>> preferenceList = (ArrayList<Map<String, String>>) document.get("preference");
                 //Gender gender = new Gender(genderMap.get("id"), genderMap.get("gender"));
-                Gender gender = new Gender("test", genderSTring);
+                Gender gender = new Gender();
                 ArrayList<Preference> preferences = new ArrayList<>();
 
                 for (Map<String, String> preference : preferenceList) {
-                    Preference pref = new Preference(preference.get("id"), preference.get("preference"), preference.get("referenceDocument"));
-                    preferences.add(pref);
+                    //Preference pref = new Preference(preference.get("id"), preference.get("preference"), preference.get("referenceDocument"), uid);
+                    //preferences.add(pref);
                 }
                 int age = document.get("age", Integer.class);
                 user = new User(uid, gender, preferences, age);

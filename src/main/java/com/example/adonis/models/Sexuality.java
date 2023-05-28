@@ -1,16 +1,22 @@
 package com.example.adonis.models;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Getter
-@Setter
+
+@Entity @Table
+@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class Sexuality {
-    private String id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long sexualityId;
     private String sexuality;
 
-    public Sexuality(String id, String sexuality) {
-        this.id = id;
-        this.sexuality = sexuality;
-    }
+    @ManyToOne
+    @JoinColumn(name = "preference_id")
+    private Preference preference;
 }

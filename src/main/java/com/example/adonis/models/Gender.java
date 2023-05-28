@@ -1,17 +1,23 @@
 package com.example.adonis.models;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 
-@Getter
-@Setter
+@Getter @Setter
+@Entity @Table
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class Gender {
 
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long genderId;
     private String gender;
 
-    public Gender(String id, String gender) {
-        this.id = id;
-        this.gender = gender;
-    }
+    @ManyToOne
+    @JoinColumn(name = "preference_id")
+    private Preference preference;
 }
