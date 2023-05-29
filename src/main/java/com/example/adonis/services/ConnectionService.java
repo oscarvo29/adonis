@@ -5,26 +5,32 @@ import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 public class ConnectionService {
-    private FileInputStream serviceAccount = null;
+    private InputStream serviceAccount = null;
     private FirebaseOptions options = null;
     private Firestore db = null;
 
+    @Autowired
+    ResourceLoader resourceLoader;
+
     public ConnectionService() {
         try {
-            ClassLoader classLoader = getClass().getClassLoader();
-            File creds = ResourceUtils.getFile("classpath:fireo-db-connector.json");
 
+            Resource resource = resourceLoader.getResource("classpath:fireo-db-connector.json");
 
-            serviceAccount = new FileInputStream(creds);
+            serviceAccount = resource.getInputStream();
             options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
