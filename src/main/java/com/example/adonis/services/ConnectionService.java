@@ -6,7 +6,9 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -18,8 +20,11 @@ public class ConnectionService {
 
     public ConnectionService() {
         try {
-            //serviceAccount = new FileInputStream("src/main/resources/fireo-db-connector.json");
-            serviceAccount = new FileInputStream(getClass().getResource("/fireo-db-connector.json").getFile());
+            ClassLoader classLoader = getClass().getClassLoader();
+            File creds = ResourceUtils.getFile("classpath:fireo-db-connector.json");
+
+
+            serviceAccount = new FileInputStream(creds);
             options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
