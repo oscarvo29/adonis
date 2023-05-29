@@ -18,7 +18,8 @@ public class ConnectionService {
 
     public ConnectionService() {
         try {
-            serviceAccount = new FileInputStream("src/main/resources/fireo-db-connector.json");
+            //serviceAccount = new FileInputStream("src/main/resources/fireo-db-connector.json");
+            serviceAccount = new FileInputStream(getClass().getResource("/fireo-db-connector.json").getFile());
             options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
