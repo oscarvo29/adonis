@@ -15,6 +15,7 @@ import java.util.Scanner;
  */
 public class CerberusService {
     private static CerberusService cerberus = null;
+    private static JSONObject firebase_credentials = null;
     private static final String CERBERUS_URL = "http://192.168.0.11:3000";
 
     private CerberusService() {}
@@ -27,10 +28,22 @@ public class CerberusService {
     }
 
     /**
+     *  Checks if the firebase credentials all ready have been loaded, if they have
+     *  it just returns them, else it will send a request for them.
+     * @return JSONObject - Firebase Credential file.
+     */
+    public JSONObject getFirebaseCredentials() {
+        if (firebase_credentials == null)
+            firebase_credentials = requestCredentials();
+
+        return firebase_credentials;
+    }
+
+    /**
      *  Sends a get request, to the node server, which returns the firebase credentials.
      * @return JSONObject - with Firebase Credentials.
      */
-    public JSONObject getFirebaseCredentials() {
+    private JSONObject requestCredentials() {
         try {
             URL url = new URL(CERBERUS_URL);
             Scanner scanner = new Scanner(url.openStream());
