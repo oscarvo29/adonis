@@ -2,21 +2,14 @@ package com.example.adonis.repositories;
 
 import com.example.adonis.models.Gender;
 import com.example.adonis.models.Preference;
-import com.example.adonis.models.Sexuality;
 import com.example.adonis.models.User;
 import com.example.adonis.services.ConnectionService;
-import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
-import com.google.firebase.database.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class UserRepository {
@@ -26,14 +19,14 @@ public class UserRepository {
     @Autowired
     private ConnectionService connectionService;
 
-    @Value("${USER_COLLECTION}")
-    private String userCollection;
+
+    private static final String USER_COLLECTION = "users";
 
     public User getActiveUserInfo(String uid) {
         User user = null;
         this.db = connectionService.getDb();
         try {
-            CollectionReference userReference = db.collection(userCollection);
+            CollectionReference userReference = db.collection(USER_COLLECTION);
             Query query =  userReference.whereEqualTo("uid", uid);
             QuerySnapshot querySnapshotApiFuture = query.get().get();
 
@@ -64,7 +57,7 @@ public class UserRepository {
         Firestore db = connectionService.getDb();
 
         try {
-            CollectionReference usersReference = db.collection(userCollection);
+            CollectionReference usersReference = db.collection(USER_COLLECTION);
             Query query = usersReference.whereEqualTo("gender", "female").whereArrayContains("preference", "male");
             QuerySnapshot querySnapshot = query.get().get();
 

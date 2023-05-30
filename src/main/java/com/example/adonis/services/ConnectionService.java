@@ -5,32 +5,34 @@ import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 @Service
 public class ConnectionService {
     private InputStream serviceAccount = null;
     private FirebaseOptions options = null;
     private Firestore db = null;
+    private CerberusService cerberus = null;
 
-    @Autowired
-    ResourceLoader resourceLoader;
+
+
 
     public ConnectionService() {
         try {
 
-            Resource resource = resourceLoader.getResource("classpath:fireo-db-connector.json");
-
-            serviceAccount = resource.getInputStream();
+            cerberus = CerberusService.getInstance();
+            JSONObject credentials = cerberus.getFirebaseCredentials();
+            String credentialsString = credentials.toString();
+            serviceAccount = new ByteArrayInputStream(credentialsString.getBytes());
             options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
